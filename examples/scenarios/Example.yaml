@@ -1,0 +1,23 @@
+# 
+# Sample 
+# 
+
+# Create contract Sample
+- contract:
+    name: Simple
+    dir: contracts/
+    sources:
+      - Simple.sol
+    args: []
+- contract:
+    name: ClickButton
+    dir: contracts/
+    sources:
+      - ClickButton.sol
+    args: []
+
+# Call method set(uint)
+- where: 'Simple'
+  call: set(uint)
+  args:
+    - '50'

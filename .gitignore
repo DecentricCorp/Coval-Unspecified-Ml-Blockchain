@@ -44,6 +44,3 @@ jspm_packages
 *.yaml.json
 .DS_Store
 .node*.kube
-
-contracts/
-scenarios/
