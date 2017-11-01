@@ -27,3 +27,10 @@ We next deploy the ClickButton Contract using the Coval-Solidity Deployment CLI 
 
 We then start the REST server from the CLI allowing interaction with the deployed contracts.
 
+Next (having previously set up a working gym environment we run click.py)
+
+Click.py loads the `wob.mini.ClickButton-v0` environment to begin training a model to be able to click the button requested.
+
+Each iteration of a task records the PointerEvent's within ethereum storage for later retrieval and and historical purposes.
+
+Click.py communicates with the contract via REST over http
