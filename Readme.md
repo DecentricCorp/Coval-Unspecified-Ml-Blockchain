@@ -3,6 +3,14 @@
 
 ---
 
+### Unspecified LLC: 
+Applying Machine learning and Ai towards the optimization of software delivery. 
+
+### Circuits of Value:
+Framework for a new internet that’s distributed, decentralized and trustless. Turning traditional crypto currency models inside out and bridging the decide between utility and revolutionary. 
+
+---
+
 ### Machine Learning technologies
 
 - Python
