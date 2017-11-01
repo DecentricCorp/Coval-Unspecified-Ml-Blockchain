@@ -42,3 +42,17 @@ Click.py loads the `wob.mini.ClickButton-v0` environment to begin training a mod
 Each iteration of a task records the PointerEvent's within ethereum storage for later retrieval and and historical purposes.
 
 Click.py communicates with the contract via REST over http here: http://127.0.0.1:4333/v1/Example/ClickButton/SaveEvent/exec?args=roundId,eventId,x,y,mask
+
+---
+
+### How to run
+run test rpc in one terminal
+run `npm run cleanup; npm run cleanup;`
+
+deploy scenario "example"
+`npm start`
+
+launch rest from cli menu after deploying
+
+in another terminal run `python click.py`
+
