@@ -30,7 +30,7 @@ env.configure(remotes=1, fps=5,
               vnc_kwargs={'encoding': 'tight', 'compress_level': 0, 
                           'fine_quality_level': 100, 'subsample_level': 0})
 observation_n = env.reset()
-
+round = 0
 while True:
   action_n = [forward(ob) for ob in observation_n] # your agent here
   observation_n, reward_n, done_n, info = env.step(action_n)
@@ -52,7 +52,11 @@ while True:
           x = action_n[0][count].x
           y = action_n[0][count].y
           buttonmask = action_n[0][count].buttonmask
-
+          # count
+          # round
+          # http get
+          import urllib2
+          urllib2.urlopen("http://127.0.0.1:4333/v1/Example/ClickButton/SaveEvent/exec?args=roundId,eventId,x,y,mask").read()
           count = count + 1
   if (reward_n[0] > 0.0):
         print 'Earned reward'
@@ -64,4 +68,5 @@ while True:
   #print 'info'
   #print info
   #print '-----------------complete'
+  tound = round + 1
   print '-----------------complete'
