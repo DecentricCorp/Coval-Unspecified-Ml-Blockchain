@@ -46,10 +46,19 @@ while True:
   print action_n[0]
   if (len(action_n[0]) > 0):
         print 'Did stuff!'
-        print len(action_n[0])
-        print action_n[0][0]
+        import itertools
+        count = 0
+        for _ in itertools.repeat(None, len(action_n[0])):
+          x = action_n[0][count].x
+          y = action_n[0][count].y
+          buttonmask = action_n[0][count].buttonmask
+
+          count = count + 1
   if (reward_n[0] > 0.0):
         print 'Earned reward'
+      #do_something()
+  #for i, event in len(action_n[0]):
+  #  print i
   #print 'done_n'
   #print done_n 
   #print 'info'
