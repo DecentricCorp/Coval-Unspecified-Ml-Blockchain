@@ -34,7 +34,7 @@ roundNumber = 0
 while True:
   action_n = [forward(ob) for ob in observation_n] # your agent here
   observation_n, reward_n, done_n, info = env.step(action_n)
-  #env.render()
+  env.render()
   print '-----------------complete' 
   #print 'observation:' 
   #print ob
@@ -64,9 +64,9 @@ while True:
           # http get
           import urllib2
           from string import Template
-          t = Template("http://127.0.0.1:4333/v1/Example/ClickButton/SaveEvent/exec?args=$round,$count,$x,$y,$buttonmask")
-          print t.substitute(values)
-          urllib2.urlopen(t.substitute(values)).read()
+          eventTemplate = Template("http://127.0.0.1:4333/v1/Example/ClickButton/SaveEvent/exec?args=$round,$count,$x,$y,$buttonmask")
+          #print .substitute(values)
+          urllib2.urlopen(eventTemplate.substitute(values)).read()
           count = count + 1
   if (reward_n[0] > 0.0):
         print 'Earned reward'
