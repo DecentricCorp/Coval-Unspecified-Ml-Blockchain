@@ -46,14 +46,28 @@ Click.py communicates with the contract via REST over http here: http://127.0.0.
 
 ---
 
-### How to run
-run test rpc in one terminal
-run `npm run cleanup; npm run cleanup;`
+### How to run locally
+- Install Ethereum testrpc in one terminal
+  `npm install -g ethereumjs-testrpc`
+- Run testrpc (terminal 1) `testrpc`
 
-deploy scenario "example"
-`npm start`
+<img src="./media/testrpc.gif"/>
 
-launch rest from cli menu after deploying
+- Install Coval Solidity `npm install`
+- Deploy scenario "example" (terminal 2) `npm start`
 
-in another terminal run `python click.py`
+<img src="./media/coval-solidity.gif" />
+- Launch REST server from tools menu after deploying contract
+  - Alternatively run from terminal `npm run web`
+
+- Install gym and universe
+`pip install gym universe`
+
+- Launch click.py (terminal 3)
+`python click.py`
+<img src="./media/WoB.gif"/>
+
+### How to run within Docker
+
+
 
