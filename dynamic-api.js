@@ -1,4 +1,5 @@
 var compiled, deployed
+var TestRPC = require("ethereumjs-testrpc")
 var menu = require('appendable-cli-menu')
 var readline = require('readline-sync')
 const files = require("./files.js")
@@ -13,12 +14,20 @@ var web3Provider = process.env.LEDGER_NODE || "http://localhost:8545"
 
 function initWeb3() {
     if (typeof web3 !== 'undefined') {
-        web3 = new Web3(web3.currentProvider);
-    } else {
-        web3 = new Web3(new Web3.providers.HttpProvider(web3Provider));
+        web3 = new Web3(web3.currentProvider)
         fromAccount = web3.eth.accounts[0]
         meta = { from: fromAccount, gas: 3000000 }
+    } else {
+        try {    
+            web3 = new Web3(new Web3.providers.HttpProvider(web3Provider));
+            fromAccount = web3.eth.accounts[0]
+            meta = { from: fromAccount, gas: 3000000 }
+        } catch(error){
+            console.log("Exiting because you need to start testrpc")
+            process.exit(0)
+        }        
     }
+    return web3
 }
 
 initWeb3()
@@ -667,6 +676,7 @@ function loadFiles(path, ext, cb) {
         return cb(_files)
     })
 }
+module.exports.initWeb3 = initWeb3
 module.exports.YAML = YAML
 module.exports.loadFiles = loadFiles
 module.exports.setDir = function (_dir) { dir = _dir }

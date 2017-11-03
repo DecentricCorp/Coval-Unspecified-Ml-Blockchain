@@ -26,18 +26,10 @@ var Web3 = require('web3'), web3
 var fromAcountIndex = process.env.ACCOUNT_INDEX || 0, fromAccount
 var web3Provider = process.env.LEDGER_NODE || "http://localhost:8545" 
 
-function initWeb3() {
-    if (typeof web3 !== 'undefined') {
-        web3 = new Web3(web3.currentProvider);
-    } else {
-        web3 = new Web3(new Web3.providers.HttpProvider(web3Provider));
-        fromAccount = web3.eth.accounts[fromAcountIndex]
-    } 
-}
-initWeb3()
-var meta = {
-    from: fromAccount
-}
+
+web3 = dynamicApi.initWeb3()
+fromAccount = web3.eth.accounts[0]
+meta = { from: fromAccount, gas: 3000000 }
 
 function writeFile(fileName, data) {
     writeFileSync(fileName, data, function () { })
@@ -256,23 +248,23 @@ function startEngine() {
         return displayNetworkDetails()
     }
     makeMenu("Select a task", [
-        "Compile & Deploy Scenario",
-        "Compile & Deploy single Contract",
+        "Compile & Deploy Scenario",/* 
+        "Compile & Deploy single Contract", */
         "Interact with deployed Contract CLI",
         "Interact with deployed Contracts REST Api",
-        "Display Web3 Network Details"
+        /* "Display Web3 Network Details" */
     ], "Action", function (result) {
         if (result.name === "Compile & Deploy Scenario") {
             startCompileScenario()
-        } else if (result.name === "Compile & Deploy single Contract") {
+        } /* else if (result.name === "Compile & Deploy single Contract") {
             startCompileContract()
-        } else if (result.name === "Interact with deployed Contract CLI") {
+        } */ else if (result.name === "Interact with deployed Contract CLI") {
             startDynamicApi()
         } else if (result.name === "Interact with deployed Contracts REST Api") {            
             startDynamicWebApi()
-        } else if (result.name === "Display Web3 Network Details") {
+        } /* else if (result.name === "Display Web3 Network Details") {
             displayNetworkDetails()
-        }
+        } */
     })
 }
 
