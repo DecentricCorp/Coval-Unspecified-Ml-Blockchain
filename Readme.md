@@ -1,5 +1,6 @@
 ## Circuits of Value (http://cov.al) + Unspecified (http://unspecified.life)
 ## Blockchain and Machine Learning Collaboration
+[![Known Vulnerabilities](https://snyk.io/test/github/decentriccorp/coval-unspecified-ml-blockchain/badge.svg)](https://snyk.io/test/github/decentriccorp/coval-unspecified-ml-blockchain)
 
 ---
 
