@@ -1,95 +1,88 @@
 pragma solidity ^0.4.9;
 
-
 contract ClickButton {
 
+    uint SessionTip = 0;
     uint RoundTip = 0;
-    uint EventTip = 0;
 
     struct PointerEvent {
-        uint id;
-        uint index;
-        uint round;
-        uint x;
-        uint y;
-        uint buttonmask;
-    }
-
-    struct Round {
-        uint id;
-        string reward;
-        mapping(uint => PointerEvent) eventByIndex;
-    }
-
-    mapping(uint => Round) RoundById;
-    mapping(uint => PointerEvent) EventById;
-
-    string[] storedData;
-    string[] storedScore;
-
-    function SaveReward(uint roundId, string reward) {
-        Round _round = RoundById[roundId];
-        _round.id = roundId;
-        _round.reward = reward;
-    }
-
-    function SaveEvent(uint roundId, uint eventIndex, uint x, uint y, uint mask) {
-        Round _round = RoundById[roundId];
-        EventTip = EventTip + 1;
-        if (roundId > RoundTip) {
-            RoundTip =RoundTip + 1;
-        }
-        _round.id = roundId;
-        PointerEvent _event = _round.eventByIndex[eventIndex];
-        _event.id = EventTip;
-        _event.index = eventIndex;
-        _event.round = roundId;
-        _event.x = x;
-        _event.y = y;
-        _event.buttonmask = mask;
-        EventById[EventTip] = _event; 
-    }
-
-    function GetRound(uint _roundId) constant returns (uint roundId, uint eventCount, string reward, uint totalRounds) {
-        Round storage _round = RoundById[_roundId];
-
-        return (
-            _round.id,
-            EventTip,
-            _round.reward,
-            RoundTip
-        );
-    }
-
-    function GetEventForRound(uint _roundId, uint _eventIndex) constant returns (uint roundId, uint eventCount, uint eventId, uint x, uint y, uint buttonmask) {
-        Round storage _round = RoundById[_roundId];
-        PointerEvent _event = _round.eventByIndex[_eventIndex];
-        return (
-            _round.id,
-            EventTip,
-            _event.id,
-            _event.x,
-            _event.y,
-            _event.buttonmask
-        );
-    }
-
-    function GetEventById(uint _eventId) constant returns (uint roundId, uint eventCount, uint eventId, uint x, uint y, uint buttonmask) {
-        PointerEvent _event = EventById[_eventId];
-        return (
-            _event.round,
-            EventTip,
-            _event.id,
-            _event.x,
-            _event.y,
-            _event.buttonmask
-        );
+        bool Locked;
+        uint Id;
+        uint X;
+        uint Y;
+        uint Buttonmask;
     }
     
-    function GetInfo() constant returns (uint TotalRounds, uint TotalEvents){
-        return (
-            RoundTip,
-            EventTip
-        );
+    struct Round {
+        bool Locked;
+        uint Id;
+        uint Reward;
+        uint EventTip;
+        mapping(uint => PointerEvent) EventByIndex;
+        bytes32 Agent;
     }
+
+    mapping(uint => mapping(uint => Round)) RoundBySession;
+
+    function getInfo() public returns (uint totalSessions, uint totalRounds) {
+        return (SessionTip, RoundTip);
+    }
+    
+    function saveReward(uint roundIndex, uint reward) public {
+        // reward amount has been turned from a decimal to a bigint
+        // 1.0 == 1000000, 0.5 == 500000, 0.01 == 10000
+        Round memory _round = RoundBySession[SessionTip][roundIndex];
+        //assert(!_round.Locked);
+        _round = roundLocking(_round);
+        _round.Locked = true;
+        _round.Id = roundIndex;
+        _round.Reward = reward;
+        RoundBySession[SessionTip][roundIndex] = _round;
+    }
+
+    function saveEvent(uint roundIndex, uint x, uint y, uint buttonmask) public {
+        handleSessionEnumeration(roundIndex);
+        Round storage _round = RoundBySession[SessionTip][roundIndex];
+        _round.Id = roundIndex;
+        PointerEvent memory _event = _round.EventByIndex[_round.EventTip];
+        _event = eventLocking(_event);
+        _event.Id = _round.EventTip;
+        _event.X = x;
+        _event.Y = y;
+        _event.Buttonmask = buttonmask;
+        _round.EventTip = _round.EventTip + 1;
+        _round.EventByIndex[_round.EventTip - 1] = _event;
+        RoundBySession[SessionTip][roundIndex] = _round;
+    }
+
+    function getRoundByRound(uint roundIndex) public constant returns(uint id, uint reward, uint eventCount, bool writeLocked) {
+        Round storage _round = RoundBySession[SessionTip][roundIndex];
+        return (_round.Id, _round.Reward, _round.EventTip, _round.Locked);
+    }
+
+    function getEventByRound(uint roundIndex, uint eventIndex) public constant returns(uint id, uint x, uint y, uint buttonmask, uint eventCount, bool writeLocked) {
+        Round storage _round = RoundBySession[SessionTip][roundIndex];
+        PointerEvent storage _event = _round.EventByIndex[eventIndex];
+        return (_event.Id, _event.X, _event.Y, _event.Buttonmask, _round.EventTip, _event.Locked);        
+    }
+
+    function handleSessionEnumeration(uint roundIndex) internal {
+        // if round < roundtip we have a new session
+        if (roundIndex < RoundTip) {
+            SessionTip = SessionTip + 1;
+        }
+    }
+
+    function eventLocking(PointerEvent _event) internal returns(PointerEvent) {
+        assert(!_event.Locked);
+        _event.Locked = true;
+        return _event;
+    }
+
+    function roundLocking(Round _round) internal returns(Round) {
+        assert(!_round.Locked);
+        _round.Locked = true;
+        return _round;
+    }
+
 }

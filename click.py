@@ -57,18 +57,21 @@ while True:
             'y':y,
             'buttonmask':buttonmask,
             'count':count,
-            'round':roundNumber            
+            'round':roundNumber,
+            'reward':reward_n[0]         
              }
           # count
           # round
           # http get
           import urllib2
           from string import Template
-          eventTemplate = Template("http://127.0.0.1:4333/v1/Example/ClickButton/SaveEvent/exec?args=$round,$count,$x,$y,$buttonmask")
-          #print .substitute(values)
+          eventTemplate = Template("http://127.0.0.1:4333/v1/Example/ClickButton/saveEvent/exec?args=$round,$x,$y,$buttonmask")
+          rewardTemplate = Template("http://127.0.0.1:4333/v1/Example/ClickButton/saveReward/exec?args=$round,$reward")
+          print eventTemplate.substitute(values)
           urllib2.urlopen(eventTemplate.substitute(values)).read()
           count = count + 1
   if (reward_n[0] > 0.0):
+        urllib2.urlopen(rewardTemplate.substitute(values)).read()
         print 'Earned reward'
       #do_something()
   #for i, event in len(action_n[0]):

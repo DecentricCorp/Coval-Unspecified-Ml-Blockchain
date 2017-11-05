@@ -44,3 +44,5 @@ jspm_packages
 *.yaml.json
 .DS_Store
 .node*.kube
+.vscode/
+.node-xmlhttprequest-sync*
