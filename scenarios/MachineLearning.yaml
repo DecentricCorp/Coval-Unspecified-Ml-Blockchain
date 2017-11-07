@@ -1,8 +1,8 @@
 # 
-# Sample 
+# Machine Learning experiment 
 # 
 
-# Create contract Sample
+# ClickButton Machine Learning Observation and Rewarding Ledger
 - contract:
     name: ClickButton
     dir: contracts/

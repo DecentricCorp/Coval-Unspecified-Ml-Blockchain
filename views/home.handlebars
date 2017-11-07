@@ -1,0 +1,43 @@
+<h1>Deployments</h1>
+
+<ul>
+    {{#each deployments}}
+        <li>{{this.name}} 
+            {{#if this.contracts}}
+            <ul>
+                {{#each this.contracts}}
+                <li>{{this.name}} (<i>{{this.address}}</i>)
+                    {{#if this.methods}}
+                    <ul>
+                        {{#each this.methods}}
+                            <li>{{this.name}}
+                                (
+                                    {{#each this.parameterInputs as |inputs|}}
+                                        {{#each inputs as |input i|}}
+                                        {{#or input value=""}} {{/or}}
+                                         {{#ifIs @last}}
+                                            {{#ifNot @../last}}
+                                                , 
+                                            {{/ifNot}}
+                                        {{/ifIs}}
+                                        {{/each}}                                                                    
+                                    {{/each}}                                
+                                )
+                            </li>
+                            {{#if this.parameterOutputs}}
+                            <ul>
+                                {{#each this.parameterOutputs as |outputs|}}
+                                    <li>{{outputs.name}} ({{outputs.type}})</li>
+                                {{/each}}
+                            </ul>
+                            {{/if}}
+                        {{/each}}
+                    </ul>
+                    {{/if}}
+                </li>
+                {{/each}}
+            </ul>
+            {{/if}}
+        </li>
+    {{/each}}
+</ul>

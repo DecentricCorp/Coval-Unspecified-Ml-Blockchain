@@ -6,6 +6,7 @@ require('dotenv').config()
 const files = require("./files.js")
 var config = require('./config.js')
 var dynamicApi = require('./dynamic-api.js')
+
 var scenarioName,
     scenarioYamlFilename,
     scenarioJsonFilename,

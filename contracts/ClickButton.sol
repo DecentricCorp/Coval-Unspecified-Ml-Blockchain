@@ -55,12 +55,12 @@ contract ClickButton {
         RoundBySession[SessionTip][roundIndex] = _round;
     }
 
-    function getRoundByRound(uint roundIndex) public constant returns(uint id, uint reward, uint eventCount, bool writeLocked) {
+    function getRoundByRound(uint roundIndex) public constant returns(uint id, uint reward, uint count, uint eventCount, bool writeLocked) {
         Round storage _round = RoundBySession[SessionTip][roundIndex];
-        return (_round.Id, _round.Reward, _round.EventTip, _round.Locked);
+        return (_round.Id, _round.Reward, RoundTip, _round.EventTip, _round.Locked);
     }
 
-    function getEventByRound(uint roundIndex, uint eventIndex) public constant returns(uint id, uint x, uint y, uint buttonmask, uint eventCount, bool writeLocked) {
+    function getEventByRound(uint roundIndex, uint eventIndex) public constant returns(uint id, uint x, uint y, uint buttonmask, uint count, bool writeLocked) {
         Round storage _round = RoundBySession[SessionTip][roundIndex];
         PointerEvent storage _event = _round.EventByIndex[eventIndex];
         return (_event.Id, _event.X, _event.Y, _event.Buttonmask, _round.EventTip, _event.Locked);        

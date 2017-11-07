@@ -1,4 +1,4 @@
-var compiled, deployed
+var compiled, deployed, app
 var TestRPC = require("ethereumjs-testrpc")
 var menu = require('appendable-cli-menu')
 var readline = require('readline-sync')
@@ -9,8 +9,40 @@ var bitcore = require('bitcore')
 var dir = "./"
 var config = require('./config.js')
 var YAML = require('yamljs')
+var exphbs  = require('express-handlebars')
 var Web3 = require('web3'), web3, fromAccount, meta, verbose = false
 var web3Provider = process.env.LEDGER_NODE || "http://localhost:8545"
+
+function plugin(){
+
+}
+
+var hbs = exphbs.create({
+    // Specify helpers which are only registered on this instance.
+    helpers: {
+        ifIs: function (conditional, options) {
+            if (conditional) {
+                return options.fn(this)
+            } else {
+                return options.inverse(this);
+            }
+        },
+        ifNot: function (conditional, options) {
+            if (!conditional) {
+                return options.fn(this)
+            } else {
+                return options.inverse(this);
+            }
+        },
+        or: function (conditional, options) {
+            if (!conditional) {
+                return options.hash.value
+            } else {
+                return conditional;
+            }
+        }
+    }
+})
 
 function initWeb3() {
     if (typeof web3 !== 'undefined') {
@@ -182,6 +214,15 @@ function getContractNames() {
     })
     return names
 }
+
+function getContracts() {
+    var names = []
+    deployed.forEach(function (contract) {
+        names[names.length] = contract
+    })
+    return names
+}
+
 function getMethodNames(input) {
     var abi = getAbiByName(input.name).filter(function (object) { return object.type === "function" })
     var names = []
@@ -326,7 +367,7 @@ var makeMenu = function (title, items, type, cb) {
 
 function startWebEngine() {
     var express = require('express')
-    var app = express()
+    app = express()
     app.set('json spaces', 4)
 
     app.use(function (req, res, next) {
@@ -336,8 +377,58 @@ function startWebEngine() {
     })
     app.use(bodyParser.json())
 
+    app.engine('handlebars', hbs.engine )//exphbs({defaultLayout: 'main'}))
+    app.set('view engine', 'handlebars');
+    
     app.get('/', function (req, res) {
-        res.json({ author: "Shannon Code (Decentric)" })
+        getDeployments(function (deployments) {
+            var returnDeploymentCollection = []
+            ifNotEmpty(deployments, function(){
+                deployments.forEach(function(deploymentName, deploymentIndex){
+                    returnDeploymentCollection.push( {name: deploymentName, contracts: [] } )
+                    loadSelectedDeployment(deploymentName)
+                    var contracts = getContracts()
+                    var contractsPtr = returnDeploymentCollection[deploymentIndex].contracts
+                    contracts.forEach(function(contract, contractIndex){
+                        var methods = getMethodNames({ name: contract.name })
+                        methods.forEach(function(methodName, methodIndex){
+                            var parameters = getParameters({contract: contract.name, function: methodName})
+                            methods[methodIndex] = {name: methodName, parameterInputs: parameters.inputs, parameterOutputs: parameters.outputs}
+                            //console.log("methods", JSON.stringify(methods, null, 4))
+                            ifComplete(methods, methodIndex, function(){
+                                contractsPtr.push({ name: contract.name, address: contract.address, methods: methods })
+                                ifComplete(contracts, contractIndex, function(){
+                                    ifComplete(deployments, deploymentIndex, function(){
+                                        renderResults(returnDeploymentCollection)
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        })
+
+        function renderResults(deployments){
+            return res.render('home', {deployments: deployments})
+        }
+
+        function ifNotEmpty(obj, cb, otherwise){
+            if (obj.length > 0) {
+                return cb()
+            } else {
+                if (otherwise) {
+                    return otherwise()
+                }
+            }
+        }
+
+        function ifComplete(obj, i, cb){
+            if (i === obj.length -1) {
+                return cb()
+            }
+        }
+        
     })
 
     /* History */
@@ -446,21 +537,35 @@ function startWebEngine() {
     app.listen(port)
     console.log('API running at http://localhost:' + port + "/v1/")
 }
+
+/// from request
 function describeMethods(req) {
     var contract = req.params.contract
-    var methods = getMethodNames({ name: contract })
-    var result = { contract: contract, methods: methods }
+    return getMethods(contract)
+}
+
+/// from string contract name
+function getMethods(contractName){
+    var methods = getMethodNames({ name: contractName })
+    var result = { contract: contractName, methods: methods }
     return result
 }
+
+/// from request
 function describeParameters(req) {
     var search = { contract: req.params.contract, function: req.params.method }
-    var result = { inputs: getFunctionInputs(search), outputs: getFunctionOutputs(search) }
+    return getParameters(search)
+}
+
+/// fron obj contractName, methodName
+function getParameters(search) {
+    var unStructuredResults = { inputs: getFunctionInputs(search), outputs: getFunctionOutputs(search) }
     var _result = { inputs: [], outputs: [] }
-    result.inputs.names.forEach(function (input, index) {
-        _result.inputs[_result.inputs.length] = { name: result.inputs.names[index], type: result.inputs.types[index] }
+    unStructuredResults.inputs.names.forEach(function (input, index) {
+        _result.inputs[_result.inputs.length] = { name: unStructuredResults.inputs.names[index], type: unStructuredResults.inputs.types[index] }
     })
-    result.outputs.names.forEach(function (output, index) {
-        _result.outputs[_result.outputs.length] = { name: result.outputs.names[index], type: result.outputs.types[index] }
+    unStructuredResults.outputs.names.forEach(function (output, index) {
+        _result.outputs[_result.outputs.length] = { name: unStructuredResults.outputs.names[index], type: unStructuredResults.outputs.types[index] }
     })
     return _result
 }
@@ -676,11 +781,21 @@ function loadFiles(path, ext, cb) {
         return cb(_files)
     })
 }
-module.exports.initWeb3 = initWeb3
-module.exports.YAML = YAML
-module.exports.loadFiles = loadFiles
-module.exports.setDir = function (_dir) { dir = _dir }
-module.exports.exec = chooseExecutionPath
-module.exports.handleDynamicApiCall = handleDynamicApiCall
-module.exports.chooseAction = chooseAction
-module.exports.loadSelectedDeployment = loadSelectedDeployment
+
+var exports = {
+    initWeb3: initWeb3,
+    app: app,
+    YAML: YAML,
+    loadFiles: loadFiles,
+    setDir: function (_dir) { dir = _dir },
+    exec: chooseExecutionPath,
+    handleDynamicApiCall: handleDynamicApiCall,
+    chooseAction: chooseAction,
+    loadSelectedDeployment: loadSelectedDeployment
+}
+exports.plugin = function(obj){
+    console.log("HERE````")
+    obj.init(exports.app)
+    return exports;
+}
+module.exports = exports
