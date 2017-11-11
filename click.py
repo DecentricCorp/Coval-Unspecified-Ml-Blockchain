@@ -65,8 +65,8 @@ while True:
           # http get
           import urllib2
           from string import Template
-          eventTemplate = Template("http://127.0.0.1:4333/v1/Example/ClickButton/saveEvent/exec?args=$round,$x,$y,$buttonmask")
-          rewardTemplate = Template("http://127.0.0.1:4333/v1/Example/ClickButton/saveReward/exec?args=$round,$reward")
+          eventTemplate = Template("http://127.0.0.1:4333/v1/MachineLearning/ClickButton/saveEvent/exec?args=$round,$x,$y,$buttonmask")
+          rewardTemplate = Template("http://127.0.0.1:4333/v1/MachineLearning/ClickButton/saveReward/exec?args=$round,$reward")
           print eventTemplate.substitute(values)
           urllib2.urlopen(eventTemplate.substitute(values)).read()
           count = count + 1
