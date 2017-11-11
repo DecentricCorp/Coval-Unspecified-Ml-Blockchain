@@ -10,7 +10,7 @@ var dir = "./"
 var config = require('./config.js')
 var YAML = require('yamljs')
 var exphbs  = require('express-handlebars')
-var Web3 = require('web3'), web3, fromAccount, meta, verbose = false
+var Web3 = require('web3'), web3, fromAccount, meta, verbose = true
 var web3Provider = process.env.LEDGER_NODE || "http://localhost:8545"
 
 function plugin(){
@@ -379,7 +379,9 @@ function startWebEngine() {
 
     app.engine('handlebars', hbs.engine )//exphbs({defaultLayout: 'main'}))
     app.set('view engine', 'handlebars');
-    
+    var path = require('path')
+    const publicPath = path.join(__dirname, '../views')
+    app.use('/', express.static(__dirname))
     app.get('/', function (req, res) {
         getDeployments(function (deployments) {
             var returnDeploymentCollection = []

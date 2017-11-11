@@ -24,7 +24,7 @@ contract ClickButton {
 
     mapping(uint => mapping(uint => Round)) RoundBySession;
 
-    function getInfo() public returns (uint totalSessions, uint totalRounds) {
+    function getInfo() constant public returns (uint totalSessions, uint totalRounds) {
         return (SessionTip, RoundTip);
     }
     

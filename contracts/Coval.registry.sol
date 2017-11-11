@@ -10,8 +10,8 @@ contract Registry is ExternallyStored {
         return true;
     }
     
-    function AddPlugin(bytes32 _name, address _pluginAddress) returns (uint contractId, uint contractTotal, address contractAddress) {
-        bool success = StorageContract().addPlugin(_name, _pluginAddress);
+    function AddPlugin(bytes32 _name, address _pluginAddress) returns (uint contractId, uint contractTotal, address contractAddress, bool success) {
+        success = StorageContract().addPlugin(_name, _pluginAddress);
         var plugin = IPlugin(_pluginAddress);
         plugin.Init();
         (contractId, contractTotal, contractAddress) = GetPlugin(_name);

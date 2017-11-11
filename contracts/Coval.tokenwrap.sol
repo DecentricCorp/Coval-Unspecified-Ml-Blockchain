@@ -6,20 +6,21 @@ contract WrapsToken {
     
     address public tokenAddress;
     
-    function WrapsToken(){}
+    function WrapsToken() {
+
+    }
     
-    function Loaded() returns (bool){
+    function Loaded() returns (bool isLoaded) {
         return true;
     }
     event TokenContractLoaded(address, string);
     
-    function setToken(address _address) public returns (address) {
+    function setToken(address _address) public returns (address _tokenAddress) {
         TokenContractLoaded(_address, "");
         tokenAddress = _address;
-        var done = Loaded();
         return tokenAddress;
     }
-    function TokenContract() internal constant returns (IToken) {
+    function TokenContract() internal constant returns (IToken token) {
         return IToken(tokenAddress);
     }
     
@@ -27,7 +28,7 @@ contract WrapsToken {
         TokenContract().mint(_destinationAddress, _amount);
     }
     
-    function TokenBalance(address _account) internal constant returns (uint) {
+    function TokenBalance(address _account) internal constant returns (uint balance) {
         return TokenContract().balanceOf(_account);
     }
 }

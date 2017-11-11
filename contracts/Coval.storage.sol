@@ -56,28 +56,27 @@ contract Storage is Owned, Versioned {
     function getContracts(Type _type) internal constant returns (uint[] Contracts) {
         return contractsByType[uint(_type)].Contracts;
     }
-    function getContract(Type _type, uint _index) constant returns (uint, uint, address) {
+    function getContract(Type _type, uint _index) public constant returns (uint id, uint total, address _address) {
         var contractRecord = contractById[contractsByType[uint(_type)].Contracts[_index]];
         return (contractRecord.Id, contractsByType[uint(_type)].Contracts.length, contractRecord.Address);
     }
-    function getContractByName(Type _type, bytes32 _name) constant returns (uint, uint, address) {
-        var Id = contractIdByName[_name];
-        var contractRecord = contractById[Id];
-        return (contractRecord.Id, contractsByType[uint(_type)].Contracts.length ,contractRecord.Address);
+    function getContractByName(Type _type, bytes32 _name) public constant returns (uint id, uint total, address _address) {
+        var contractRecord = contractById[contractIdByName[_name]];
+        return (contractRecord.Id, contractsByType[uint(_type)].Contracts.length, contractRecord.Address);
     }
     /* Plugin */
-    function addPlugin(bytes32 _name, address _contractAddress) returns (bool) {
+    function addPlugin(bytes32 _name, address _contractAddress) returns (bool success) {
         return addContract(Type.Plugin, _name, _contractAddress);
     }
-    function getPlugin(uint _index) constant returns (uint, uint, address) {
+    function getPlugin(uint _index) constant returns (uint id, uint total, address _address) {
         return getContract(Type.Plugin, _index);
         
     }
-    function getPluginByName(bytes32 _name) constant returns(uint, uint, address) {
+    function getPluginByName(bytes32 _name) constant returns(uint id, uint total, address _address) {
         return getContractByName(Type.Plugin, _name);
     }
     /* User */
-    function addUser(bytes32 _btcAddress, address _ethAddress) returns (uint) {
+    function addUser(bytes32 _btcAddress, address _ethAddress) returns (uint userId) {
         var userCheck = userExists(_btcAddress, _ethAddress);
         if (userCheck > 0) {
             return userCheck;
@@ -88,7 +87,7 @@ contract Storage is Owned, Versioned {
         userIdByEth[_ethAddress] = userTip;
         return userTip;
     }
-    function userExists(bytes32 _btcAddress, address _ethAddress) returns (uint) {
+    function userExists(bytes32 _btcAddress, address _ethAddress) returns (uint id) {
         var eth = userById[userIdByEth[_ethAddress]];
         if (eth.EthAddress != emptyAddress ) {
             return eth.Id;
@@ -104,7 +103,7 @@ contract Storage is Owned, Versioned {
         return (user.Id, userTip, user.BtcAddress, user.EthAddress, user.Claimed);
     }
     /* Deposit */
-    function addDeposit(bytes32 burnTx, bytes32 sig, bytes32 txId, bytes32 _sender, bytes32 _recipient, uint _amount) returns(address, uint){
+    function addDeposit(bytes32 burnTx, bytes32 sig, bytes32 txId, bytes32 _sender, bytes32 _recipient, uint _amount) returns(address ethAddress, uint amount) {
         depositTip += 1;
         var deposit = Model.Deposit(depositTip, burnTx, sig, txId, userIdByBtc[_sender], userIdByBtc[_recipient], _amount, false);
         depositById[depositTip] = deposit;
@@ -113,7 +112,7 @@ contract Storage is Owned, Versioned {
         return (userById[userIdByBtc[_recipient]].EthAddress, _amount);
     }
     /* Mint */
-    function addMint(bytes32 _recipientId, uint _amount, bool seen) returns(address, uint){
+    function addMint(bytes32 _recipientId, uint _amount, bool seen) returns(address ethAddress, uint amount) {
         mintTip += 1;
         // register temp if unknown recipient
         var mint = Model.Mint(mintTip, userIdByBtc[_recipientId], _amount, seen);
@@ -122,7 +121,7 @@ contract Storage is Owned, Versioned {
         return (userById[userIdByBtc[_recipientId]].EthAddress, _amount);
     }
     /* Transfer */
-    function addTransfer(bytes32 _senderId, bytes32 _recipientId, uint _amount) returns(address, uint){
+    function addTransfer(bytes32 _senderId, bytes32 _recipientId, uint _amount) returns(address ethAddress, uint amount) {
         transferTip += 1;
         var transfer = Model.Transfer(transferTip, userIdByBtc[_senderId], userIdByBtc[_recipientId], _amount, false);
         transferById[transferTip] = transfer;

@@ -5,16 +5,18 @@ contract ExternallyStored {
     
     address internal storageAddress;
     
-    function ExternallyStored(){}
+    function ExternallyStored() {
+
+    }
     
-    function Loaded() returns (bool){
+    function Loaded() returns (bool) {
         return true;
     }
     event StorageContractLoaded(address, string);
-    function setStorage(address _address) public returns (address) {
+
+    function setStorage(address _address) public returns (address _storageAddress) {
         StorageContractLoaded(_address, "");
         storageAddress = _address;
-        var done = Loaded();
         return storageAddress;
     }
     /*function getStorage() public constant returns (address) {

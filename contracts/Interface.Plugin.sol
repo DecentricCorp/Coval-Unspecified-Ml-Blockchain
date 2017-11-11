@@ -10,7 +10,7 @@ contract IPlugin is IContract, IRecord {
     string public ContractName;
     string public Description;
     
-    function Init() external returns (bool){ 
+    function Init() external returns (bool isInitialized) { 
         if (initialized) {
             return false;
         }
@@ -18,16 +18,20 @@ contract IPlugin is IContract, IRecord {
         return PostInit();
         
     }
-    function _Init() internal returns (bool){}
+    function _Init() internal returns (bool success) {
+
+    }
     
     event Loaded(string, string, bool);
-    function PostInit() internal returns (bool) {
+    function PostInit() internal returns (bool isReady) {
         initialized = true;
         Loaded("Plugin loading complete: ", PluginName, initialized);
         return Ready();
     }
-    function DoWork(uint, bytes32[]) returns (bool){}
-    function Ready() constant returns (bool){
+    function DoWork(uint, bytes32[]) returns (bool success) {
+
+    }
+    function Ready() constant returns (bool isReady) {
         return initialized;
     }
 }

@@ -2,14 +2,14 @@ pragma solidity ^0.4.7;
 
 contract IToken {
   //function totalSupply() constant returns (uint256 supply) {}
-  function balanceOf(address _owner) constant returns (uint256 balance) {}
-  function transfer(address _to, uint256 _value) returns (bool success) {}
-  function tranferFrom(address _from, address _to, uint256 _value) returns (bool success) {}
-  function ownerTransferFrom(address _from, address _to, uint256 _value) returns (bool success) {}
-  function approve(address _spender, uint256 _value) returns (bool success) {}
-  function allowance (address _owner, address _spender) constant returns (uint256 remaining) {}
-  function unapprove(address _spender) returns (bool success) {}
-  function mint(address _destinationAddress, uint _amount) {}
+  function balanceOf(address) constant returns (uint256) {}
+  function transfer(address, uint256) returns (bool) {}
+  function tranferFrom(address, address, uint256) returns (bool) {}
+  function ownerTransferFrom(address, address, uint256) returns (bool) {}
+  function approve(address, uint256) returns (bool) {}
+  function allowance (address, address) constant returns (uint256) {}
+  function unapprove(address) returns (bool) {}
+  function mint(address, uint) {}
 
   event Transfer(address indexed _from, address indexed _to, uint256 _value);
   event Approved(address indexed _owner, address indexed _spender, uint256 _value);

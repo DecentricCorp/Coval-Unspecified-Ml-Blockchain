@@ -25,7 +25,7 @@ contract Controlled is ExternallyStored, WrapsToken {
         bytes32 btcAddress;
         address ethAddress;
         bool claimed;
-        (id, total, btcAddress, ethAddress, claimed) = StorageContract().getUser(_destinationAddress);
+         (id, total, btcAddress, ethAddress, claimed) = StorageContract().getUser(_destinationAddress);
         if (ethAddress == emptyAddress) {
             ethAddress = StringToAddress(_destinationAddress);
             StorageContract().addUser(_destinationAddress, ethAddress);

@@ -1,43 +1,251 @@
-<h1>Deployments</h1>
+<html>
+    <head>
+        <!-- Required Stylesheets -->
+        <link href="/assets/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+        {{!-- <link href="/assets/bootstrap-treeview/public/css/bootstrap-treeview.css" rel="stylesheet"> --}}
+        <link href="/assets/treeview/tree.css" rel="stylesheet">
+        <!-- Required Javascript -->
+        <script src="/assets/jquery/dist/jquery.js"></script>
+        <script src="/assets/handlebars/handlebars.js"></script>
+        <script src="/assets/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="/assets/treeview/tree.js"></script>
+        {{!-- <script src="/assets/bootstrap-treeview/public/js/bootstrap-treeview.js"></script> --}}
+    </head>
+    <body>
 
-<ul>
-    {{#each deployments}}
-        <li>{{this.name}} 
-            {{#if this.contracts}}
-            <ul>
-                {{#each this.contracts}}
-                <li>{{this.name}} (<i>{{this.address}}</i>)
-                    {{#if this.methods}}
-                    <ul>
-                        {{#each this.methods}}
-                            <li>{{this.name}}
-                                (
-                                    {{#each this.parameterInputs as |inputs|}}
-                                        {{#each inputs as |input i|}}
-                                        {{#or input value=""}} {{/or}}
-                                         {{#ifIs @last}}
-                                            {{#ifNot @../last}}
-                                                , 
-                                            {{/ifNot}}
-                                        {{/ifIs}}
-                                        {{/each}}                                                                    
-                                    {{/each}}                                
-                                )
-                            </li>
-                            {{#if this.parameterOutputs}}
+        <h1>Deployments</h1>
+        <div id="modal-container"></div>
+        <div class="container" style="margin-top:30px;">
+            <div class="row">
+                <ul id="tree">
+                    {{#each deployments as |deployment|}}
+                        <li>{{deployment.name}} 
+                            {{#if deployment.contracts}}
                             <ul>
-                                {{#each this.parameterOutputs as |outputs|}}
-                                    <li>{{outputs.name}} ({{outputs.type}})</li>
+                                {{#each deployment.contracts as |contract|}}
+                                <li>{{contract.name}} (<i>{{contract.address}}</i>)
+                                    {{#if contract.methods}}
+                                    <ul>
+                                        {{#each contract.methods as |method|}}
+                                            <li>{{method.name}}
+                                                (
+                                                    {{#each method.parameterInputs as |inputs|}}
+                                                        {{#each inputs as |input i|}}
+                                                        {{#or input value=""}} {{/or}}
+                                                        {{#ifIs @last}}
+                                                            {{#ifNot @../last}}
+                                                                , 
+                                                            {{/ifNot}}
+                                                        {{/ifIs}}
+                                                        {{/each}}                                                                    
+                                                    {{/each}}                                
+                                                ) <i class="execute glyphicon glyphicon-play" deployment="{{deployment.name}}" contract="{{contract.name}}" method="{{method.name}}"></i>
+                                                {{#if this.parameterOutputs}}
+                                                    <ul>
+                                                        {{#each this.parameterOutputs as |outputs|}}
+                                                            <li>{{outputs.name}} ({{outputs.type}})</li>
+                                                        {{/each}}
+                                                    </ul>
+                                                {{/if}}
+                                            </li>
+                                            
+                                        {{/each}}
+                                    </ul>
+                                    {{/if}}
+                                </li>
                                 {{/each}}
                             </ul>
                             {{/if}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+        <script type="text/x-handlebars" id="place-modal-template">
+            <div class="modal fade" id="my-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                \{{#if parsedResult}}
+                                    \{{deployment}}.\{{method}}
+                                \{{else}}
+                                    \{{deployment}}.\{{contract}}.\{{method}}
+                                \{{/if}}                                
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>                            
+                            \{{#if this.inputs}}
+                                <form id="Form" for="\{{#if parsedResult}}\{{deployment}}.\{{method}}\{{else}}\{{deployment}}.\{{contract}}.\{{method}}\{{/if}}" template="\{{template}}" outputs="\{{outputs}}">
+                                    <div class="modal-body">                                        
+                                        \{{#each this.inputs as |input|}}                                            
+                                            <label for="\{{input.name}}Input">\{{input.name}}</label>
+                                            \{{#equal input.type "address"}}
+                                                <div class="input-group dropdown">
+                                                    <input type="text" name="\{{input.name}}" class="form-control countrycode dropdown-toggle" placeholder="\{{input.type}}" id="\{{input.name}}Input">
+                                                        <ul class="dropdown-menu">
+                                                            \{{#each ../this.contracts as |_contract|}}
+                                                                <li><a data-value="\{{_contract.address}}">\{{_contract.name}}</a></li>
+                                                            \{{/each}}
+                                                        </ul>
+                                                    <span role="button" class="input-group-addon dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></span>
+                                                </div>
+                                            \{{else}}
+                                                <input type="text" class="form-control" name="\{{input.name}}" id="\{{input.name}}Input" aria-describedby="\{{input.name}}Help" placeholder="\{{input.type}}" autocomplete="off">
+                                            \{{/equal}}
+                                        \{{/each}}
+                                    </div>                               
+                                </form>
+                            \{{/if}}
+                            \{{#if this.result}}
+                            <form id="Form" for="\{{#if parsedResult}}\{{method}}\{{else}}\{{contract}}.\{{method}}\{{/if}}">
+                                <div class="modal-body">
+                                    \{{#each this.result as |result|}}
+                                    <div class="input-group">
+                                        \{{result.name}} \{{result.value}} \{{#if result.type}}(\{{result.type}})\{{/if}}
+                                    </div>
+                                    \{{/each}}
+                                </div>
+                            </form>
+                            \{{/if}}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            \{{#if this.result}}
+                            \{{else}}
+                                <button type="button" class="btn btn-primary" id="execute" data-value="Form">Execute</button>
+                            \{{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <script>
+            $('#tree').treed()
+            
+            Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
+                if (arguments.length < 3)
+                    throw new Error("Handlebars Helper equal needs 2 parameters");
+                if( lvalue!=rvalue ) {
+                    return options.inverse(this);
+                } else {
+                    return options.fn(this);
+                }
+            })
+            function getModalTemplate(){
+                return Handlebars.compile($("#place-modal-template").html())
+            }
+            $(document).on('click', '.dropdown-menu a', function() {
+                console.log($(this).attr('data-value'))
+                $(this).closest('.dropdown').find('input').val($(this).attr('data-value'))
+            })
+            $(document).on('click', '#execute', function() {
+                //console.log("execute", $(this).attr('data-value'))
+                var data = $("#Form").serializeArray()
+                var templateUrl = $("#Form").attr("template")
+                var outputs = JSON.parse($("#Form").attr("outputs"))
+                constructMethodExecutionUrl(templateUrl, data, function(methodExecution){
+                    $("#my-modal").modal('hide')
+                    var methodDetails = methodExecution.split('/exec')[0]
+                    executeMethod(outputs, methodExecution, methodDetails, function(data){
+                        data.outputs = outputs
+                        //data.deployment = target.deployment.value
+                        console.log("Execution results", data)
+                        $("#modal-container").html(getModalTemplate()(data))
+                        $("#my-modal").modal()
+                    })
+                })
+                
+                //console.log("form", data, "target", target, "url", methodExecutionUrl )
+            })
+            function constructMethodDetailsUrl(target) {
+                return document.URL + "v1/" + target.deployment.value + "/" + target.contract.value + "/" + target.method.value
+            }
+            function constructMethodExecutionUrl(url, values, cb) { 
+                values.forEach(function(item, index){
+                    //console.log(index, item)
+                    url = url.replace(item.name, item.value)
+                    if (index === values.length -1) {
+                        return cb(url)
+                    }
+                })
+            }
+            $(document).on('click', '.execute', function(){
+                var target = $(this).get(0).attributes
+                console.log("Execute:", target.method.value, "in", target.contract.value, "contract")
+                var methodDetails = constructMethodDetailsUrl(target)
+                var methodExecute = methodDetails + "/exec"
+                console.log("API", methodDetails)
+                callApi(methodDetails, function(data){
+                    data.contracts = []
+                    {{#each deployments as |deployment|}}
+                        {{#each deployment.contracts as |contract|}}
+                            //console.log({name: "{{contract.name}}", address: "{{contract.address}}"})
+                            data.contracts.push({name: "{{contract.name}}", address: "{{contract.address}}"})
                         {{/each}}
-                    </ul>
-                    {{/if}}
-                </li>
-                {{/each}}
-            </ul>
-            {{/if}}
-        </li>
-    {{/each}}
-</ul>
+                    {{/each}}
+                    if (data.inputs.length < 1) {
+                        var outputs = data.outputs
+                        executeMethod(outputs, methodExecute, methodDetails, function(data){
+                            data.outputs = outputs
+                            data.deployment = target.deployment.value
+                            console.log("Execution results", data)
+                            $("#modal-container").html(getModalTemplate()(data))
+                            $("#my-modal").modal()
+                        })
+                    } else {
+                        console.log("Execute!")
+                        console.log(methodExecute)
+                        //data.template = methodExecute
+                        data.outputs = JSON.stringify(data.outputs)
+                        data.deployment = target.deployment.value
+                        $("#modal-container").html(getModalTemplate()(data))
+                        $("#my-modal").modal()
+                    }
+                    
+                })                
+            })
+
+            function executeMethod(outputs, methodExecute, methodDetails, cb) {
+                console.log("OUTPUTS!!!", outputs)
+                callApi(methodExecute, function(data){
+                            data.detailsUrl = methodDetails
+                            data.result = []
+                            if (!Array.isArray(data.parsedResult)) {
+                                if (typeof(data.parsedResult) === 'string') {
+                                    console.log("Single result")
+                                    var value = data.parsedResult
+                                    var type = outputs[0].type
+                                    if (value.Error) {
+                                        value = "Error"
+                                        type = "string"
+                                    }
+                                    data.result.push({value: value, type: type , name: outputs[0].name})
+                                    return cb(data)
+                                } else {
+                                    var count = 0
+                                    for (var key in data.parsedResult) {
+                                        if (data.parsedResult.hasOwnProperty(key)) {
+                                            var value = data.parsedResult[key]
+                                            var name = key
+                                            data.result.push({value: value, name: name})
+                                        }
+                                    }
+                                    return cb(data)
+                                } 
+                            }
+                        })
+            }
+
+            function callApi(url, cb) {
+                $.ajax({
+                    url: url,
+                }).done(function(data) {
+                    console.log("ajax detail", data)
+                    return cb(data)
+                })
+            }
+        </script>
+    </body>
+</html>

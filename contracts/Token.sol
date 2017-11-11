@@ -14,13 +14,12 @@ contract Token is IToken, Owned, Versioned {
 
   function Token() {
     var owner = msg.sender;
-    var version = '0.2.1'; 
     var totalSupply = 0;
     TokenCreated(owner);
   }
 
 
-  function mint(address _owner, uint256 _amount)  {
+  function mint(address _owner, uint256 _amount) public {
     totalSupply += _amount;
     balances[_owner] += _amount;
     TokenMinted(_owner, _amount);
@@ -40,8 +39,7 @@ contract Token is IToken, Owned, Versioned {
       balances[_to] += _value;
       Transfer(msg.sender, _to, _value);
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -53,8 +51,7 @@ contract Token is IToken, Owned, Versioned {
       allowed[_from][msg.sender] -= _value;
       Transfer(_from, _to, _value);
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -66,8 +63,7 @@ contract Token is IToken, Owned, Versioned {
       balances[_to] += _value;
       OwnerTransfer(msg.sender, _from, _to, _value);
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -80,20 +76,18 @@ contract Token is IToken, Owned, Versioned {
       allowed[_from][msg.sender] -= _value;
       OwnerTransferFrom(msg.sender, _from, _to, _value);
       return true;
-    }
-    else {
+    } else {
         return false;
     }
   }
 
 
   function approve(address _spender, uint256 _value) returns (bool success) {
-    if(allowed[msg.sender][_spender] + _value > allowed[msg.sender][_spender]) {
+    if (allowed[msg.sender][_spender] + _value > allowed[msg.sender][_spender]) {
       allowed[msg.sender][_spender] += _value;
       Approved(msg.sender, _spender, _value);
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }

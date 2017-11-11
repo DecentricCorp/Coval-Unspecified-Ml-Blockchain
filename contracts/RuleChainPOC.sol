@@ -41,12 +41,14 @@ contract RuleChainPOC is RuledOver {
         Log("Inside Halt Early Fail", _value++);
     }
     
-    function createToken() returns (address) {
+    function createToken() returns (address token) {
         Token token = new Token();
         uint value = token.assignRule("foo", true, "balancesOf", RuleType.MemberOf);
         var (name, allow) = token.getRule(0);
         //LogString("get name for 0", bytes32ToString(token.getRuleName(0)));
         //LogString("get name for 0", bytes32ToString(name));
+        LogString("get name for 0", bytes32ToString(name));
+        LogString("allow?", allow);
         Log("foo rule added and returns", value);
         /*uint value2 = token.assignRule("bar", false, "balancesOf", RuleType.MemberOf);
         var (name, allow) = token.getRule(0);

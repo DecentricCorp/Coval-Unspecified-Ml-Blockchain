@@ -46,3 +46,4 @@ jspm_packages
 .node*.kube
 .vscode/
 .node-xmlhttprequest-sync*
+k8s/

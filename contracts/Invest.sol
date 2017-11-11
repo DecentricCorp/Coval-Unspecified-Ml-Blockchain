@@ -41,7 +41,7 @@ contract Invest {
 
     // This is the constructor whose code is
     // run only when the contract is created.
-    function Invest() {
+    function Invest() public {
     }
     
     
