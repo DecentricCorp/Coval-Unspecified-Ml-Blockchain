@@ -58,7 +58,7 @@ while True:
             'buttonmask':buttonmask,
             'count':count,
             'round':roundNumber,
-            'reward':reward_n[0]         
+            'reward':int(float(reward_n[0]) * int(100000000))
              }
           # count
           # round
@@ -72,7 +72,7 @@ while True:
           count = count + 1
   if (reward_n[0] > 0.0):
         urllib2.urlopen(rewardTemplate.substitute(values)).read()
-        print 'Earned reward'
+        print ('Earned reward', int(float(reward_n[0]) * int(100000000)))
       #do_something()
   #for i, event in len(action_n[0]):
   #  print i
