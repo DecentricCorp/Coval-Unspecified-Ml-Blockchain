@@ -42,7 +42,7 @@ Click.py loads the `wob.mini.ClickButton-v0` environment to begin training a mod
 
 Each iteration of a task records the PointerEvent's within ethereum storage for later retrieval and and historical purposes.
 
-Click.py communicates with the contract via REST over http here: http://127.0.0.1:4333/v1/Example/ClickButton/SaveEvent/exec?args=roundId,eventId,x,y,mask
+Click.py communicates with the contract via REST over http here: http://127.0.0.1:4333/v1/MachineLearning/ClickButton/SaveEvent/exec?args=roundId,eventId,x,y,mask
 
 ---
 
@@ -54,7 +54,7 @@ Click.py communicates with the contract via REST over http here: http://127.0.0.
 <img src="./media/testrpc.gif"/>
 
 - Install Coval Solidity `npm install`
-- Deploy scenario "example" (terminal 2) `npm start`
+- Deploy scenario "MachineLearning" (terminal 2) `npm start`
 
 <img src="./media/coval-solidity.gif" />
 - Launch REST server from tools menu after deploying contract
