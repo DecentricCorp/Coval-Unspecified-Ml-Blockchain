@@ -77,7 +77,7 @@ contract Modified is Eventable {
     }
     
     /* More logging stuff */
-    function makeLogCallback(string _msg) internal  {
+    function makeLogCallback(string _msg) internal {
         Log(_msg, _step++);
     }
     

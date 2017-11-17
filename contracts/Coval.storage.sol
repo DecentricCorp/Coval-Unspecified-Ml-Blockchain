@@ -9,7 +9,7 @@ import "Interface.Plugin.sol";
 
 contract Storage is Owned, Versioned {
     
-    function Storage(){}
+    //function Storage(){}
     
     uint depositTip = 0;
     uint transferTip = 0;

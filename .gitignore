@@ -47,3 +47,5 @@ jspm_packages
 .vscode/
 .node-xmlhttprequest-sync*
 k8s/
+*.npy
+app/log/

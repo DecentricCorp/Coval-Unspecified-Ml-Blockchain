@@ -48,12 +48,12 @@ function initWeb3() {
     if (typeof web3 !== 'undefined') {
         web3 = new Web3(web3.currentProvider)
         fromAccount = web3.eth.accounts[0]
-        meta = { from: fromAccount, gas: 3000000 }
+        meta = { from: fromAccount, gas: 4000000000 }
     } else {
         try {    
             web3 = new Web3(new Web3.providers.HttpProvider(web3Provider));
             fromAccount = web3.eth.accounts[0]
-            meta = { from: fromAccount, gas: 3000000 }
+            meta = { from: fromAccount, gas: 4000000000 }
         } catch(error){
             console.log("Exiting because you need to start testrpc")
             process.exit(0)

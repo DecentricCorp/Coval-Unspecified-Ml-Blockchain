@@ -171,6 +171,15 @@
                     }
                 })
             }
+            function registerKeyCatch(){
+                $('input').on("keypress", function(e) {
+                    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+                    if(key == 13) {
+                        e.preventDefault();
+                        $("button:contains('Execute')").click()
+                    }
+                })
+            }
             $(document).on('click', '.execute', function(){
                 var target = $(this).get(0).attributes
                 console.log("Execute:", target.method.value, "in", target.contract.value, "contract")
@@ -202,6 +211,7 @@
                         data.deployment = target.deployment.value
                         $("#modal-container").html(getModalTemplate()(data))
                         $("#my-modal").modal()
+                        registerKeyCatch()
                     }
                     
                 })                

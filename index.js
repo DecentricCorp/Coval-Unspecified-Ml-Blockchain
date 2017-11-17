@@ -30,7 +30,7 @@ var web3Provider = process.env.LEDGER_NODE || "http://localhost:8545"
 
 web3 = dynamicApi.initWeb3()
 fromAccount = web3.eth.accounts[0]
-meta = { from: fromAccount, gas: 3000000 }
+meta = { from: fromAccount, gas: 4000000000 }
 
 function writeFile(fileName, data) {
     writeFileSync(fileName, data, function () { })
@@ -61,7 +61,7 @@ function compileContractCollection(collectionIndex, contractCollection, cb) {
                 }
                 let abi = compiledContract.contracts[key].interface;
                 let bytecode = compiledContract.contracts[key].bytecode;
-                let gasEstimate = web3.eth.estimateGas({ data: bytecode });
+                let gasEstimate = web3.eth.estimateGas({ data: bytecode }) * 2;
                 let Contract = web3.eth.contract(JSON.parse(abi));
                 compiledContracts[compiledContracts.length] = { 
                     contract: Contract, 
@@ -133,6 +133,7 @@ function deployContracts(compiledContracts, deployIndex, _cb) {
         }
     }
     //console.log(argValues)
+    console.log("--------------------", "GAS", context.gasEstimate)
     context.contract.new(argValues, {
         from: fromAccount,
         data: context.bytecode,
@@ -253,7 +254,7 @@ function startEngine() {
         "Compile & Deploy single Contract", */
         "Interact with deployed Contract CLI",
         "Interact with deployed Contracts REST Api",
-        /* "Display Web3 Network Details" */
+        "Display Web3 Network Details"
     ], "Action", function (result) {
         if (result.name === "Compile & Deploy Scenario") {
             startCompileScenario()
@@ -263,9 +264,9 @@ function startEngine() {
             startDynamicApi()
         } else if (result.name === "Interact with deployed Contracts REST Api") {            
             startDynamicWebApi()
-        } /* else if (result.name === "Display Web3 Network Details") {
+        } else if (result.name === "Display Web3 Network Details") {
             displayNetworkDetails()
-        } */
+        }
     })
 }
 
