@@ -1,0 +1,163 @@
+# 
+# Coval 
+# 
+# Created on: 3/25/2017, 2:58:11 AM 
+# 
+
+# Create contract Storage
+- from: '0x3c0395ab33bd6c2f90093dcedd3219251647a9ab'
+  to: null
+  value: '0x0'
+  contract:
+    name: Storage
+    dir: contracts/
+    sources:
+      - Coval.controller.sol
+      - Coval.external.sol
+      - Coval.master.sol
+      - Coval.model.sol
+      - Coval.registry.sol
+      - Coval.storage.sol
+      - Coval.tokenwrap.sol
+      - Interface.Contract.sol
+      - Interface.Plugin.sol
+      - Interface.Record.sol
+      - Interface.Token.sol
+      - Owned.sol
+      - Plugin.Sample.sol
+      - Plugin.StringValidate.sol
+      - Token.sol
+      - Versioned.sol
+    args: []
+# Create contract Token
+- from: '0x3c0395ab33bd6c2f90093dcedd3219251647a9ab'
+  to: null
+  value: '0x0'
+  contract:
+    name: Token
+    dir: contracts/
+    sources:
+      - Coval.controller.sol
+      - Coval.external.sol
+      - Coval.master.sol
+      - Coval.model.sol
+      - Coval.registry.sol
+      - Coval.storage.sol
+      - Coval.tokenwrap.sol
+      - Interface.Contract.sol
+      - Interface.Plugin.sol
+      - Interface.Record.sol
+      - Interface.Token.sol
+      - Owned.sol
+      - Plugin.Sample.sol
+      - Plugin.StringValidate.sol
+      - Token.sol
+      - Versioned.sol
+    args: []
+# Create contract Coval
+- from: '0x3c0395ab33bd6c2f90093dcedd3219251647a9ab'
+  to: null
+  value: '0x0'
+  contract:
+    name: Coval
+    dir: contracts/
+    sources:
+      - Coval.controller.sol
+      - Coval.external.sol
+      - Coval.master.sol
+      - Coval.model.sol
+      - Coval.registry.sol
+      - Coval.storage.sol
+      - Coval.tokenwrap.sol
+      - Interface.Contract.sol
+      - Interface.Plugin.sol
+      - Interface.Record.sol
+      - Interface.Token.sol
+      - Owned.sol
+      - Plugin.Sample.sol
+      - Plugin.StringValidate.sol
+      - Token.sol
+      - Versioned.sol
+    args: []
+
+# Create contract Registry
+- from: '0x3c0395ab33bd6c2f90093dcedd3219251647a9ab'
+  to: null
+  value: '0x0'
+  contract:
+    name: Registry
+    dir: contracts/
+    sources:
+      - Coval.controller.sol
+      - Coval.external.sol
+      - Coval.master.sol
+      - Coval.model.sol
+      - Coval.registry.sol
+      - Coval.storage.sol
+      - Coval.tokenwrap.sol
+      - Interface.Contract.sol
+      - Interface.Plugin.sol
+      - Interface.Record.sol
+      - Interface.Token.sol
+      - Owned.sol
+      - Plugin.Sample.sol
+      - Plugin.StringValidate.sol
+      - Token.sol
+      - Versioned.sol
+    args: []
+
+# Create contract StringValidate
+- from: '0x3c0395ab33bd6c2f90093dcedd3219251647a9ab'
+  to: null
+  value: '0x0'
+  contract:
+    name: StringValidate
+    dir: contracts/
+    sources:
+      - Coval.controller.sol
+      - Coval.external.sol
+      - Coval.master.sol
+      - Coval.model.sol
+      - Coval.registry.sol
+      - Coval.storage.sol
+      - Coval.tokenwrap.sol
+      - Interface.Contract.sol
+      - Interface.Plugin.sol
+      - Interface.Record.sol
+      - Interface.Token.sol
+      - Owned.sol
+      - Plugin.Sample.sol
+      - Plugin.StringValidate.sol
+      - Token.sol
+      - Versioned.sol
+    args: []
+
+
+# Call method setStorage(address)
+- from: '0x3c0395ab33bd6c2f90093dcedd3219251647a9ab'
+  to: '0xc3369c849d951578b7fa13fcfb2dd94b72e69f07'
+  value: '0x0'
+  where: 'Coval'
+  call: setStorage(address)
+  args:
+    - 'Storage.address'
+
+# Call method setToken(address)
+- from: '0x3c0395ab33bd6c2f90093dcedd3219251647a9ab'
+  to: '0xc3369c849d951578b7fa13fcfb2dd94b72e69f07'
+  value: '0x0'
+  where: 'Coval'
+  call: setToken(address)
+  args:
+    - 'Token.address'
+
+# Call method setStorage(address)
+- from: '0x3c0395ab33bd6c2f90093dcedd3219251647a9ab'
+  to: '0x0832d43dd1defb20761e5fe019e1b8abd6a2cfb6'
+  value: '0x0'
+  where: 'Registry'
+  call: setStorage(address)
+  args:
+    - 'Storage.address'
+
+

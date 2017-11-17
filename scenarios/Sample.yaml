@@ -1,0 +1,25 @@
+# 
+# Sample 
+# 
+
+# Create contract Sample
+- contract:
+    name: Sample
+    dir: contracts/
+    sources:
+      - Sample.sol
+    args: []
+
+# Create contract Sample
+- contract:
+    name: Invest
+    dir: contracts/
+    sources:
+      - Invest.sol
+    args: []
+
+# Call method set(uint)
+- where: 'Sample'
+  call: set(uint)
+  args:
+    - '50'    
