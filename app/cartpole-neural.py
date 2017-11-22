@@ -65,7 +65,7 @@ def initial_population():
             action = random.randrange(0,2)
             # do it!
             observation, reward, done, info = env.step(action)
-            
+            print('------------- Observation', observation)
             # notice that the observation is returned FROM the action
             # so we'll store the previous observation here, pairing
             # the prev observation to the action we'll take.
@@ -91,6 +91,7 @@ def initial_population():
                     output = [1,0]
                     
                 # saving our training data
+                print('-------- training data', [data[0], output])
                 training_data.append([data[0], output])
 
         # reset env to play again

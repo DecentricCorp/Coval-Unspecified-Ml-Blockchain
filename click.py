@@ -1,7 +1,7 @@
 import gym
 import universe # register the universe environments
 import numpy as np
-import cPickle as pickle
+#import cPickle as pickle
 
 def forward(ob):
   """ 
@@ -35,17 +35,17 @@ while True:
   action_n = [forward(ob) for ob in observation_n] # your agent here
   observation_n, reward_n, done_n, info = env.step(action_n)
   env.render()
-  print '-----------------complete' 
+  print ('-----------------complete')
   #print 'observation:' 
   #print ob
   #pickle.dump(observation_n[0], f, -1)
-  print 'reward_n'
-  print reward_n[0]
-  print reward_n[0] > 0.0
-  print type(action_n[0])
-  print action_n[0]
+  print ('reward_n')
+  print (reward_n[0])
+  print (reward_n[0] > 0.0)
+  print (type(action_n[0]))
+  print (action_n[0])
   if (len(action_n[0]) > 0):
-        print 'Did stuff!'
+        print ('Did stuff!')
         import itertools
         count = 0
         for _ in itertools.repeat(None, len(action_n[0])):
@@ -67,7 +67,7 @@ while True:
           from string import Template
           eventTemplate = Template("http://127.0.0.1:4333/v1/MachineLearning/ClickButton/saveEvent/exec?args=$round,$x,$y,$buttonmask")
           rewardTemplate = Template("http://127.0.0.1:4333/v1/MachineLearning/ClickButton/saveReward/exec?args=$round,$reward")
-          print eventTemplate.substitute(values)
+          print(eventTemplate.substitute(values))
           urllib2.urlopen(eventTemplate.substitute(values)).read()
           count = count + 1
   if (reward_n[0] > 0.0):
@@ -82,4 +82,4 @@ while True:
   #print info
   #print '-----------------complete'
   roundNumber = roundNumber + 1
-  print '-----------------complete'
+  print ('-----------------complete')
