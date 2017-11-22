@@ -49,3 +49,4 @@ jspm_packages
 k8s/
 *.npy
 app/log/
+.scannerwork/
