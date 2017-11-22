@@ -26,7 +26,6 @@ roundNumber = 0
 def coordToArray(x, y):
     x = x - 10
     y = y - 125
-    #board = [[0]*768 for _ in range(1024)]
     board = np.zeros((210, 160, 3))
     board[y][x] = 1
     return board
