@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "appendable-cli-menu": "^2.0.0",
-    "bitcore": "^0.11.7",
+    "bitcore": "^1.0.0",
     "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
     "ethereumjs-testrpc": "^4.1.3",
