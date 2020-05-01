@@ -10,7 +10,9 @@
     "web": "node dynamic-api.js web",
     "info": "node index.js info",
     "pre": "mkdir ./scenarios; mkdir ./contracts; cp ./examples/contracts/*.sol ./contracts/; cp ./examples/scenarios/*.yaml ./scenarios/",
-    "cleanup": "rm -rf ./scenarios; rm -rf ./contracts"
+    "cleanup": "rm -rf ./scenarios; rm -rf ./contracts",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "Shannon Code (Decentric)",
   "license": "MIT",
@@ -27,6 +29,8 @@
     "solc": "^0.4.11",
     "web3": "^0.19.0",
     "web3-provider-engine": "^13.3.3",
-    "yamljs": "^0.2.8"
-  }
+    "yamljs": "^0.2.8",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
