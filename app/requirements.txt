@@ -56,7 +56,7 @@ fastcache==1.0.2
 fastzbarlight==0.0.14
 filelock==2.0.12
 Flask==0.12.2
-Flask-Cors==3.0.3
+Flask-Cors==3.0.9
 funcsigs==1.0.2
 functools32==3.2.3.post2
 future==0.16.0
