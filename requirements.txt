@@ -44,7 +44,7 @@ cytoolz==0.8.2
 dask==0.15.3
 datashape==0.5.4
 decorator==4.1.2
-distributed==1.19.1
+distributed==2021.10.0
 docker-py==1.10.3
 docker-pycreds==0.2.1
 docutils==0.14
